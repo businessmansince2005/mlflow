@@ -21,6 +21,7 @@ COPY app/ ./app/
 COPY scripts/train.py ./scripts/train.py
 # Ensure data directory exists and copy dataset
 RUN mkdir -p scripts/data
+# Copy dataset (if present)
 COPY telco_churn.csv.csv ./scripts/data/telco_churn.csv.csv
 # Copy MLflow artifacts (models)
 COPY mlruns/ ./mlruns/
