@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn Prediction API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+        .endpoint a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .endpoint a:hover {
+            text-decoration: underline;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 Churn Prediction API Test</h1>
+        
+        <div class="info">
+            <strong>API Base URL:</strong> http://localhost:8000<br>
+            <strong>Interactive Docs:</strong> <a href="http://localhost:8000/docs" target="_blank">http://localhost:8000/docs</a>
+        </div>
+
+        <div class="endpoint">
+            <strong>Quick Links:</strong><br>
+            • <a href="http://localhost:8000/" target="_blank">Root Endpoint</a><br>
+            • <a href="http://localhost:8000/health" target="_blank">Health Check</a><br>
+            • <a href="http://localhost:8000/docs" target="_blank">Interactive API Docs (Swagger)</a><br>
+            • <a href="http://localhost:8000/redoc" target="_blank">Alternative API Docs (ReDoc)</a>
+        </div>
+
+        <h2>Test Prediction</h2>
+        <form id="predictionForm">
+            <div class="form-group">
+                <label>Gender:</label>
+                <select id="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Senior Citizen:</label>
+                <select id="SeniorCitizen" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Partner:</label>
+                <select id="Partner" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Dependents:</label>
+                <select id="Dependents" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Tenure (months):</label>
+                <input type="number" id="tenure" value="12" min="0" max="72" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Phone Service:</label>
+                <select id="PhoneService" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Multiple Lines:</label>
+                <select id="MultipleLines" required>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No phone service">No phone service</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Internet Service:</label>
+                <select id="InternetService" required>
+                    <option value="DSL">DSL</option>
+                    <option value="Fiber optic">Fiber optic</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Online Security:</label>
+                <select id="OnlineSecurity" required>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet service</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Online Backup:</label>
+                <select id="OnlineBackup" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="No internet service">No internet service</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Device Protection:</label>
+                <select id="DeviceProtection" required>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet service</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Tech Support:</label>
+                <select id="TechSupport" required>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet service</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Streaming TV:</label>
+                <select id="StreamingTV" required>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet service</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Streaming Movies:</label>
+                <select id="StreamingMovies" required>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet service</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Contract:</label>
+                <select id="Contract" required>
+                    <option value="Month-to-month">Month-to-month</option>
+                    <option value="One year">One year</option>
+                    <option value="Two year">Two year</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Paperless Billing:</label>
+                <select id="PaperlessBilling" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Payment Method:</label>
+                <select id="PaymentMethod" required>
+                    <option value="Electronic check">Electronic check</option>
+                    <option value="Mailed check">Mailed check</option>
+                    <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                    <option value="Credit card (automatic)">Credit card (automatic)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Monthly Charges:</label>
+                <input type="number" id="MonthlyCharges" value="70.35" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Total Charges:</label>
+                <input type="text" id="TotalCharges" value="1397.5" required>
+            </div>
+            
+            <button type="submit">Predict Churn</button>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                gender: document.getElementById('gender').value,
+                SeniorCitizen: parseInt(document.getElementById('SeniorCitizen').value),
+                Partner: document.getElementById('Partner').value,
+                Dependents: document.getElementById('Dependents').value,
+                tenure: parseInt(document.getElementById('tenure').value),
+                PhoneService: document.getElementById('PhoneService').value,
+                MultipleLines: document.getElementById('MultipleLines').value,
+                InternetService: document.getElementById('InternetService').value,
+                OnlineSecurity: document.getElementById('OnlineSecurity').value,
+                OnlineBackup: document.getElementById('OnlineBackup').value,
+                DeviceProtection: document.getElementById('DeviceProtection').value,
+                TechSupport: document.getElementById('TechSupport').value,
+                StreamingTV: document.getElementById('StreamingTV').value,
+                StreamingMovies: document.getElementById('StreamingMovies').value,
+                Contract: document.getElementById('Contract').value,
+                PaperlessBilling: document.getElementById('PaperlessBilling').value,
+                PaymentMethod: document.getElementById('PaymentMethod').value,
+                MonthlyCharges: parseFloat(document.getElementById('MonthlyCharges').value),
+                TotalCharges: document.getElementById('TotalCharges').value
+            };
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = 'Loading...';
+
+            try {
+                const response = await fetch('http://localhost:8000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const probability = (data.churn_probability * 100).toFixed(2);
+                    const prediction = data.churn_prediction === 1 ? 'YES (High Risk)' : 'NO (Low Risk)';
+                    const riskColor = data.churn_prediction === 1 ? '#dc3545' : '#28a745';
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>Prediction Result:</h3>
+                        <p><strong>Churn Probability:</strong> <span style="color: ${riskColor}; font-size: 24px;">${probability}%</span></p>
+                        <p><strong>Churn Prediction:</strong> <span style="color: ${riskColor}; font-weight: bold;">${prediction}</span></p>
+                        <p><strong>Interpretation:</strong> ${data.churn_prediction === 1 
+                            ? 'This customer has a high risk of churning. Consider retention strategies.' 
+                            : 'This customer has a low risk of churning.'}</p>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `<strong>Error:</strong> ${data.detail || JSON.stringify(data)}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}<br>Make sure the API server is running at http://localhost:8000`;
+            }
+        });
+    </script>
+</body>
+</html>
+
