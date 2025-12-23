@@ -16,9 +16,13 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application code and data
 COPY app/ ./app/
-COPY scripts/data/ ./scripts/data/
+COPY scripts/train.py ./scripts/train.py
+# Ensure data directory exists and copy dataset
+RUN mkdir -p scripts/data
+COPY telco_churn.csv.csv ./scripts/data/telco_churn.csv.csv
+# Copy MLflow artifacts (models)
 COPY mlruns/ ./mlruns/
 
 # Expose port 8000
