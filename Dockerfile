@@ -1,26 +1,32 @@
-FROM python:3.10-bullseye
+# Use Python 3.9 slim image
+FROM python:3.9-slim
 
-WORKDIR /home/mlflow
+# Set working directory
+WORKDIR /app
 
-RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y --no-install-recommends nodejs \
-    # java
-    openjdk-11-jre-headless \
-    # yarn
-    && npm install --global yarn \
-    # protoc
-    && wget https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-linux-x86_64.zip -O /tmp/protoc.zip \
-    && mkdir -p /home/mlflow/.local \
-    && unzip /tmp/protoc.zip -d /home/mlflow/.local/protoc \
-    && rm /tmp/protoc.zip \
-    && chmod -R +x /home/mlflow/.local/protoc \
-    # adding an unprivileged user
-    && groupadd --gid 10001 mlflow  \
-    && useradd --uid 10001 --gid mlflow --shell /bin/bash --create-home mlflow
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/home/mlflow/.local/protoc/bin:$PATH"
+# Copy requirements file
+COPY requirements.txt .
 
-# the "mlflow" user created above, represented numerically for optimal compatibility with Kubernetes security policies
-USER 10001
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["bash"]
+# Copy application code
+COPY app/ ./app/
+COPY scripts/data/ ./scripts/data/
+COPY mlruns/ ./mlruns/
+
+# Expose port 8000
+EXPOSE 8000
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV MLFLOW_TRACKING_URI=file:./mlruns
+ENV PORT=8000
+
+# Run the application (use PORT env var for Render compatibility)
+CMD uvicorn app.app:app --host 0.0.0.0 --port ${PORT:-8000}
