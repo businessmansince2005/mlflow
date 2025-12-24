@@ -6,6 +6,19 @@ mlruns.db
 mlflow.db
 **/basic_auth.db
 
+# Ignore MLflow artifacts and upstream source
+mlflow/
+mlruns/
+mlflow.db
+
+# Ignore datasets (if you don’t want them public)
+scripts/data/
+
+# Ignore Python environment and caches
+.venv/
+__pycache__/
+*.pyc
+
 # Mac
 .DS_Store
 
